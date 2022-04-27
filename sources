@@ -1,0 +1,30 @@
+--------------------------------------------------
+
+Data are taken from:
+    https://www.kaggle.com/
+and are relased as Creative Commons 0 (CC0)
+CC0 license details: https://creativecommons.org/publicdomain/zero/1.0/
+
+In particular there are used the followig dataset:
+
+030k.csv    modified from original file chess_games.csv at: https://www.kaggle.com/datasets/arevel/chess-games?select=chess_games.csv
+250k.csv    same as "030k.csv", for more precise but slower results
+otherDatasets/lichessGames.csv  from: https://www.kaggle.com/datasets/datasnaek/chess
+
+--------------------------------------------------------------
+
+Icons are taken from:
+    https://www.iconfinder.com/
+and are released with "Free for commercial use" license.
+
+Iconfinder license overview:    https//support.iconfinder.com/en/articles/18233-license-overview
+For details check:    https://docs.google.com/spreadsheets/d/1E8X2_xmJkkoeZwa1HPNG6jT3ytAZlcAgzTDRX0jDF-Q/edit#gid=0
+
+In particular there are used the followig icons:
+
+www/english.png     https://www.iconfinder.com/icons/16014/england_english_flag_great_britain_inghilterra_italia_uk_united_kingdom_icon
+www/italian.png     https://www.iconfinder.com/icons/92144/italy_icon
+www/whitePawn.svg   https://www.iconfinder.com/icons/754819/battle_checkmate_chess_figure_game_pawn_icon
+www/blackPawn.svg   https://www.iconfinder.com/icons/754825/battle_checkmate_chess_figure_game_pawn_icon
+
+-------------------------------------------------------------
