@@ -1,0 +1,32 @@
+<h2>App per l'esplorazione statistica delle aperture nel gioco degli scacchi</h2>
+<p>
+  La presente è una shiny-App, scritta con il linguaggio di programmazione <em>R</em> che analizza, in base all'input
+  dato dall'utente, un dataset contenete diverse informazioni riguardo un gran numero di partite di scacchi.
+</p>
+<h3>Come funziona?</h3>
+<p>
+  Ad ogni mossa inserita dall'utente, il programma estrae un sub-dataset
+  composto dall'insieme di tutte e sole le partite che cominciano con l'esatta
+  sequenza indicata.
+  <br />In particolare:
+<ul>
+  <li>Viene stimata, con relativi intervalli di confidenza al 95%, la
+    probabilità che una partita iniziata come indicato, si concluda con una
+    vittoria da parte del giocatore bianco/nero oppure con un pareggio.
+  </li>
+  <li>
+    Vengono calcolate le principali statistiche (media, mediana, quartili ed
+    estremi) sul punteggio ELO, sia dei giocatori che manovrano i pezzi
+    bianchi sia di quelli neri.
+  </li>
+  <li>
+    Viene indicato qual'è la risposta all'ultima mossa inserita
+    statisticamente più frequente.
+  </li>
+  <li>
+    Si fornisce il codice ECO e il nome dell'apertura giocata.
+  </li>
+</ul>
+È possibile inoltre sostituire il dataset di default con uno proprio, purché
+questo rispetti le condizioni indicate nella pagina <em>"Change dataset"</em>.
+</p>
