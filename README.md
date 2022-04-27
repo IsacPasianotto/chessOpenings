@@ -8,7 +8,7 @@ Scaricato la cartella con il progetto, è sufficiente aprirlo con Rstudio ed sel
 
 In alternativa su una console in *R*, digitare: 
 
-`shiny::runApp('<>pathToTheDirectory')`
+`shiny::runApp('<pathToTheDirectory>')`
 
 
 ## Librerie necessarie al funzionamento
