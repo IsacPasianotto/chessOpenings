@@ -1,0 +1,23 @@
+<h2>Chess opening explorer app</h2>
+  <p>
+    This is  a shiny-app, written in <em>R</em> programming language,which analyzes, based on the input given by the user, a dataset that contains various details about a large number of chess games.
+  </p>
+<h3>How does it works?</h3>
+  <p>
+    At each move entered by the user, the program extracts a sub-dataset composed of the set of all and only the games that begin with the exact sequence indicated. In detail:
+    <ul>
+      <li>
+        It is esitimated the probability, with relative 95% confidence intervals, that a match started as indicated, will end with a victory for the white/black player or a draw.
+      </li>
+      <li>
+        The main statistics (mean, median, quartiles and extremes) are calculated on the ELO score of the player with the white pieces and the one with the black.
+      </li>
+      <li>
+        It indicates which move is most frequently played against the last one inserted.
+      </li>
+      <li>
+        It shows the ECO code and the opening name of the game that was played.
+      </li>
+    </ul>
+    It is possible to replace the default dataset with your own, as long as it complies with all the conditions indicated on the <em>Change dataset</em> page.
+  </p>
