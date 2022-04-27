@@ -1,0 +1,22 @@
+<p>The program can also be used with its own dataset.</p>
+<p>
+  To work correctly, the input file must have a <em><strong>.csv</strong></em> extension.
+  Moreover it must contain the following variables named in this way:
+</p>
+<ul>
+  <li><em><u>winner</u></em>: &nbsp; Winner of the match.</li>
+  <li><em><u>white_rating</u></em>: &nbsp;ELO score of the player with the white pieces.</li>
+  <li><em><u>black_rating</u></em>: &nbsp;ELO score of the player with the black pieces.</li>
+  <li><em><u>opening_code</u></em>: &nbsp;ECO code that identifies the played game.</li>
+  <li><em><u>opening_name</u></em>: &nbsp;Name of the opening played in the match.</li>
+  <li><em><u>moves</u>:</em>&nbsp;Game move sequences.</li>
+</ul>
+<p>Other variables, even if ignored at runtime, could weigh heavily on the memory.</p>
+<p>The program only works if the <em><u>winner</u></em> variable is formatted according to one of the following two alterantives:</p>
+<p>
+  - &quot;white&quot;, &quot;black&quot;, &quot;draw&quot;<br>
+  - &quot;1-0&quot;, &quot;0-1&quot;, &quot;1/2-1/2&quot;
+</p>
+<p>Finally, it should be noted that the file size limit is set to 256mB, to upload a larger file just modify the following line  <code>global.R</code>  file according to your needs:</p>
+<p><code>options(shiny.maxRequestSize=256*1024^2)</code></p>
+<p>The program automatically sets the default value of <em>R</em> to 5mB when it stops.</p>
