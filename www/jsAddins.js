@@ -6,8 +6,8 @@ $(document).on("keyup", function(e){
   if(e.key == "z" && e.ctrlKey){
     Shiny.onInputChange("ctrlzPressed", Math.random());
   }
-  if(e.key =="r" && e.ctrlKey){
-    Shiny.onInputChange("ctrlrPressed", Math.random());
+  if(e.key =="r"){
+    Shiny.onInputChange("rKeyPressed", Math.random());
   }
 });
 

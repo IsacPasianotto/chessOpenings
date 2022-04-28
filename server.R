@@ -541,7 +541,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$ctrlzPressed, {click("undo")} )
   
-  observeEvent(input$ctrlrPressed, {click("reset")} )
+  observeEvent(input$rKeyPressed, {click("reset")} )
   
 }
 
