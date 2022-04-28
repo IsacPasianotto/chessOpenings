@@ -22,6 +22,6 @@ Per funzionare correttamente, il programma richiede le seguenti librerie:
 - gridExtra
 - rchess
 
-Qual'ora una o più non fossero installate, prima di eseguire l'applicazione è necessario inserire in una console di *R*:
+Qualora una o più non fossero installate, prima di eseguire l'applicazione è necessario inserire in una console di *R*:
 
 `install.package('missingPackageName')`
