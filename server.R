@@ -4,17 +4,17 @@ server <- function(input, output, session) {
   
   options(shiny.maxRequestSize=512*1024^2)
   
-  # Carica le pagine html corrette nel tab "Data & Help" all'avvio
+  # Loads the correct html pages in "Data & Help" tab on start up
   output$aboutPanel <- renderUI({includeHTML("www/en-about.html")})
   output$movePanel <- renderUI({includeHTML("www/en-howToMove.html")})
   output$datasetPanel <- renderUI({includeHTML("www/en-changeDataset.html")})
   
   rv <<- reactiveValues()
   
-  #' Indica come è codificata la variabile `selectedGamesDF$winner`
-  #' @param v una singola riga del dataframe selectedGamesDF$winner, per es. selectedGamesDF$winner[1]
-  #' @return TRUE se il vincitore è indicato con: "white", "black" or "draw";
-  #'         FALSE se il vincitore è indicato con: "1-0", "0-1" or "1/2-1/2"  
+  #' Indicates the `selectedGamesDF$winner` structure
+  # @param v A single row from selectedGamesDF$winner, e.g.  selectedGamesDF$winner[1]
+  #' @return TRUE if it's"white", "black" or "draw";
+  #'         FALSE if it's "1-0", "0-1" or "1/2-1/2"  
   isVictoryBDW <- function(v) {
     return(
       grepl("black", v, ignore.case = TRUE) ||
@@ -23,18 +23,18 @@ server <- function(input, output, session) {
     )
   }
   
-  #' Indica come sono salvate le sequenze di mosse in `selectedGamesDF$moves`
-  #' @param mv una singola riga del dataframe selectedGamesDF$moves, per es. selectedGamesDF$moves[1]
-  #' @return TRUE Se le mosse sono registrate con la numerazione,    per es: "1. e4 e5 2. Nf3 Nc6 3. Bb5 ..."; 
-  #'         FALSE Se non sono indicati i numeri delle mosse,        per es: "e4 e5 Nf3 Nc6 Bb5 ..."
+  #' Indicates the `selectedGamesDF$moves` structure
+  #' @param mv A single row from selectedGamesDF$moves, e.g.  selectedGamesDF$moves[1]
+  #' @return TRUE if moves are recorded as for example "1. e4 e5 2. Nf3 Nc6 3. Bb5 ..."; 
+  #'         FALSE if they are like: "e4 e5 Nf3 Nc6 Bb5 ..."
   isNumeredMoves <- function(mw) {
     return(startsWith(mw, "1."))
   }
   
   # initializeAll() ------------------------------------------------------------
   
-  #' Inizializza ai valori di partenza tutti i reacriveValues di`rv` 
-  #' @param file il file in .csv contenente i dati da utilizzare come dataset iniziale. Può differire da "030k.csv" nel caso venga caricato un file esterno 
+  #' Initializes all reactive values of `rv` to the starting values.
+  #' @param file the .csv file containing the initial dataset. It may not be "030k.csv" in the case of loading an external file 
   #' @return None
   initializeAll <- function(file="030k.csv"){
     rv$chss <- Chess$new()
@@ -46,13 +46,15 @@ server <- function(input, output, session) {
     rv$whiteEloLS <- list()
     rv$blackEloLS <- list()
     addProbabilitiesRow(rv$selectedGamesDF$winner) |> isolate()
-    observeEvent(rv, {rv$whiteEloLS[[1]] <- rv$selectedGamesDF$white_rating})
-    observeEvent(rv, {rv$blackEloLS[[1]] <- rv$selectedGamesDF$black_rating}) 
+    observeEvent(rv, {
+      rv$whiteEloLS[[1]] <- rv$selectedGamesDF$white_rating
+      rv$blackEloLS[[1]] <- rv$selectedGamesDF$black_rating
+    })
   }
   
-  #' Aggiunge una riga alla fine di `rv$probabilitiesDF` con le stime delle probabilità dei possibili esiti di 
-  #'  una partita, seguite dagli estremi dei relativi intervalli di confidenza. L'ordinazione è la seguente: bianco, nero, pareggio.
-  #' @param win un vettore contenente la colonna `winner` della tabella `rv$selectedGamesDF`
+  #' Appends a row at the end of `rv$probabilitiesDF`  containing the probability estimates of all possible outcomes
+  #'  of a game together with the relative confidence intervals, sorted as follows: white, black and draw.
+  #' @param win a vector which is the winner column in `rv$selectedGamesDF`
   #' @return None
   addProbabilitiesRow <- function(win) {
     N <- length(win)
@@ -85,8 +87,9 @@ server <- function(input, output, session) {
   
   # renderAll() ----------------------------------------------------------------
   
-  #' Metodo generico che si occupa della renderizzazione di tutti gli elementi della lista `output` definiti nella ui
-  #' Tranne che per i casi più semplici, richiama metodi e funzioni specifiche per ogni elemento di `output`
+  #' Generic method that renders every element of the `output` list present in the ui.
+  #' Except for the simplest cases, it calls specially defined functions for each `output` element
+  #' which has to be rendered.
   #' @param None
   #' @return None
   renderAll <- function() {
@@ -123,7 +126,7 @@ server <- function(input, output, session) {
     })
   }
   
-  #' Riassume tutti gli elementi contenuti in un vettore di mosse in un'unica stringa aggiungedo, se necessario, la numerazione delle mossse.
+  #' Summarizes a vector of moves into a single string, including the numbering if it's needed.
   #' @param movesVec vector containing one move in each position
   #' @return a string with all the moves in sequence separated by a space
   genMoveStr <- function(movesVec) {
@@ -141,30 +144,29 @@ server <- function(input, output, session) {
     return(str)
   }
   
-  #' Prova ad identificare come si chiama l'apertura.
-  #' Aumentando il numero di mosse inserite, dovrebbe diventare sempre più affidabile.
+  #' Try to guess the name of the current game opening. 
+  #' When the number of moves increases, it should become more precise.
   #' @param None
-  #' @return charachter: il nome dell'apertura che compare con maggiore frequenza nel dataset in uso.
+  #' @return charachter: the highest absolute frequency mode in the `rv$selectedGamesDF$opening_name` column
   getOpeningName <- function() {
     return(
       sort(table(rv$selectedGamesDF$opening_name))[1] |> names()
     )
   }
   
-  #' Prova a idenfiticare il codice ECO dell'apertura giocata.
-  #' Aumentando il numero di mosse inserite, dovrebbe diventare sempre più affidabile. 
-  #' Con poche mosse inserite, dovrebbe essere più preciso di getOpeningName()
+  #' Try to guess the ECO code of the current game opening.
+  #' When the number of moves increases, it should become more precise, with few moves it is more precise than getOpeningName().
   #' @param None
-  #' @return charachter: il codice ECO dell'apertura che compare con maggiore frequenza nel dataset in uso.
+  #' @return charachter: the highest absolute frequency mode in the `rv$selectedGamesDF$opening_code` column
   getOpeningECO <- function() {
     return(
       sort(table(rv$selectedGamesDF$opening_code))[1] |> names()
     )
   }
   
-  #' Ritorna le risposte più frequentemente giocate contro l'ultima mossa inserita in input dall'utente.  
-  #' @param n Il numero di continuazioni popolari che si vuole siano ritornate
-  #' @return table: tabella con le `n` continuazioni più giocate e quante volte queste compaiono nel dataset in uso.
+  #' Returns the most frequently played moves in response to the last input one. 
+  #' @param n the desired number of most popular continuation (note: bigger value of n requires more execution time)
+  #' @return a table with the n most popular continuation and their relative frequencies found in `rv$selectedGamesDF`
   getPopularContinuation <- function(n) {
     nTurn <- rv$nTurn 
     if (isNumeredMoves(rv$selectedGamesDF$moves[1])) nTurn <- floor((3*nTurn+2)/2) + 1
@@ -174,10 +176,12 @@ server <- function(input, output, session) {
     return(sort(table(nextMoves), decreasing = TRUE)[1:n])
   }
   
-  #' Per ciascuno dei risultati ottenuti richiamando la funzione `getPopularContinuation()`
-  #' aggiunge una riga ad una tabella contenente il conteggio dei possibili esiti della partita 
-  #' nell'ipotesi che la prossima mossa sia una di quelle ritornate dalla funzione.
-  #' Infine renderizza la tablla costruita nell' user interface in `output$commonContinuations` 
+  #' Constructs a table containing the number of games found in `rv$selectedGamesDF`
+  #' where the next move in `moves` column  is one of those returned by the
+  #' `getPopularContinuation()` function. 
+  #' Then render the built table in the UI in `output$commonContinuations`.
+  #' @param None
+  #' @return None
   renderCommonContinuation <- function() {
     names <- names(getPopularContinuation(input$nCommon))
     freq <- unname(getPopularContinuation(input$nCommon)) |>  as.vector()
@@ -204,10 +208,10 @@ server <- function(input, output, session) {
     output$commonContinuations <- renderTable(df)
   }
   
-  #' Costruisce il grafico visualizzato in `output$winnerPlor`
-  #' Questo metodo sfrutta la libreria ggplot2. Per fare questo, risulta conveniente prima costruire
-  #' un dataframe `dftfr` temporaneo con una struttura più agevole da utilizzare. 
-  #' La struttura di `dtfr` è la seguente:
+  #' Builds the plot displayed in `output$winnerPlor`
+  #' This method benefits from the ggplot package, in order to do that it first builds
+  #' a temporary data frame `dtfr` with a structure easier to manage in ggplot. 
+  #' `dtfr`'s structure: 
   #'   +------+---------+-------------+----------------+----------------+
   #'   | Turn | Event   | Probability | lower bound CI | upper bound CI |
   #'   +======+=========+=============+================+================+
@@ -255,13 +259,13 @@ server <- function(input, output, session) {
     }) 
   }
   
-  #' Costruisce e renderizza il grafico visualizzato in `output$eloPlot`.
-  #' Questo metodo deve gestire tre differenti casi:
-  #' - plt1: una sequenza di coppie di boxplot che forniscono una rappresentazione generale dell'andamento delle distribuzioni dei punteggi ELO.
-  #' - plt2: una coppia di istogrammi che rappresenta più dettagliatamente le distribuzioni dei punteggi ELO al turno corrente.
-  #' - plt3: andamento del punteggio ELO medio dei due giocatori e la sua evoluzione col susseguirsi dei turni.
-  #' In ciascuno di questi casi, prima di procedere con la rappresentazione, conviene costruirsi un dataframe con una struttura che ne 
-  #' agevoli le successive elaborazioni con il pacchetto ggplot. In particolare: 
+  #' Builds the plot displayed in `output$eloPlot`
+  #' This method handles three possible different cases:
+  #' - plt1: a set of box plot diagram pairs that show in a general way the trend of the distributions of the elo scores
+  #' - plt2: a pair of histograms showing the two elo distributions at the current turn
+  #' - plt3: Trend of the average score of the black/white player during the rounds
+  #' In each case, before building the rendered plot, the function builds a data frame conveniently 
+  #' structured to proceed with the graphical representation: 
   #'     plt1:                                plt2:                      plt3: 
   #'       +------+-------+---------------+      vector contained in        +------+-------------+-------+
   #'       | Trun | Color | ELO           |       rv$<color>EloLS           | Turn | Average ELO | Color |
@@ -343,16 +347,16 @@ server <- function(input, output, session) {
     )
   }
   
-  #' Renderizza la scacchiera con i pezzi nelle loro corrette case.
+  #' Render the chessboard with the pieces in their right squares.
   #' @param None
   #' @return None
   renderBoard <- function() {
     observe(
-      output$board <- renderChessboardjs({chessboardjs(rv$chss$fen(),  )})
+      output$board <- renderChessboardjs({chessboardjs(rv$chss$fen())})
     )
   }
   
-  #' Renderizza tutte le tabelle con le informazioni numeriche visualizzate nel tab "details".
+  #' Render all the tables displayed in the "details" tab.
   #' @param None
   #' @return None
   renderDetails <- function() {
@@ -380,9 +384,9 @@ server <- function(input, output, session) {
   
   # "Move" button --------------------------------------------------------------
   
-  #' Se è stata inserita una mossa legale, aggiorna tutti i reactive values contenuti in `rv`
-  #' e ricalcola tutti gli output sulla base del nuovo dataset contenuto in `rv$selectedGamesDF`.
-  #' Altrimenti, visualizza a schermo un messaggio d'errore insieme ad una lista con tutti gli input accettati.
+  #' If a correct move has been entered, update all reactive values contained in `rv`
+  #' and recalculate all outputs with the new data set contained in `rv$selectedGamesDF`.
+  #' Otherwise it displays an error message along with a list of acceptable inputs.
   observeEvent(input$doIt, {
     disable("doIt")
     updateTextInput(session, inputId = "nextMove", value = "")
@@ -411,8 +415,8 @@ server <- function(input, output, session) {
   
   # "Undo" button --------------------------------------------------------------
   
-  #' Controlla se è stata inserita almeno una mossa.
-  #' In questo caso riporta il programma allo stato precedente all'ultima pressione del tasto "move".
+  #' Check if at least one move has been entered.
+  #' In this case it reports the program status as the moment before the "move" button was pressed.
   observeEvent(input$undo, {
     if(rv$nTurn > 0) {
       rv$whiteEloLS[[rv$nTurn + 1]] <- c()
@@ -426,11 +430,11 @@ server <- function(input, output, session) {
       if (nrow(rv$selectedGamesDF) == 0) {rv$selectedGamesDF <- rv$allGamesDF}
       renderAll()
     }
-  })# input$undo
+  }) # input$undo
   
   # "Reset" button -------------------------------------------------------------
   
-  #' Riporta l'applicazione al suo stato iniziale.
+  #' Brings the app to its initial state
   observeEvent(input$reset, {
     disable("reset")
     initializeAll()
@@ -440,8 +444,8 @@ server <- function(input, output, session) {
   
   # "Change data set" action ----------------------------------------------------
   
-  #' Controlla il file caricato in input dall'utente. 
-  #' Se è tutto ok, inizializza il programma con il nuovo dataset.
+  #' Checks the file uploaded by the user. 
+  #' If everything is ok, initializes the program with the new dataset
   observeEvent(input$inputFile, {
     req(input$inputFile)
     check1 <- file_ext(input$inputFile$datapath) == "csv"
@@ -450,15 +454,16 @@ server <- function(input, output, session) {
       grepl("black_rating", header) && grepl("opening_name", header) &&
       grepl("opening_code", header) && grepl("winner", header)
     if (!check1) output$inputFileError <- renderText({"ERROR: Please, select a .csv file"})
-    if (!check2) output$inputFileError <- renderText({"ERROR: The column requirements are not satisfied"})
+    if (check1 && !check2) output$inputFileError <- renderText({"ERROR: The column requirements are not satisfied"})
     if (check1 && check2) {
       output$inputFileError <- renderText({""})
       initializeAll(file = input$inputFile$datapath)
       renderAll()
     }
-  })#input$inputFile
+  }) #input$inputFile
   
-  #' Quando si chiude la finestra del browser, ripristina il valore di default di R per la dimensione massima dei file caricati.
+  #' When the browser is closed, terminates the program and resets the default value of 
+  #' options(shiny.maxRequestSize).
   session$onSessionEnded(function(){
     stopApp()
     options(shiny.maxRequestSize=5*1024^2) # R default value
@@ -468,8 +473,8 @@ server <- function(input, output, session) {
   
   # Color turn indicator  ------------------------------------------------------
   
-  #' Nascone e mostra un icona per indicare il turno del giocatore, in base al colore a cui 
-  #' spetta la prossima mossa.
+  #' Dynamically shows and hides an icon for white or black turn depending on 
+  #' who has to enter the current following move.
   observeEvent(rv$nTurn, {
     if (rv$nTurn %% 2 == 0) {
       hide("blackIndicator")
@@ -483,18 +488,20 @@ server <- function(input, output, session) {
   
   # Language support -----------------------------------------------------------
   
-  #' Mostra i tasti per cambiare lingua solo nel tab appropriato.
+  #' Shows the language buttons only in the appropriate tab
   observeEvent(input$menu, {
-    if(input$menu == "Data & help") {
+    if(input$menu == "?About") {
       show("it")
       show("en")
+      show("sourceCodeButton")
     } else {
       hide("it")
       hide("en")
+      hide("sourceCodeButton")
     }
   })
   
-  #' Seleziona la lingua richiesta.
+  #' Select the required language
   observeEvent(input$it, {
     output$aboutPanel <- renderUI({includeHTML("www/it-about.html")})
     output$movePanel <- renderUI({includeHTML("www/it-howToMove.html")})
@@ -508,12 +515,12 @@ server <- function(input, output, session) {
   
   # Mouse and keyboard support -------------------------------------------------
   
-  #' Controlla per ogni click registrato, se è stato effettuato nell'aria della scacchiera.
-  #' Nel caso lo fosse:
-  #'  - identifica il nome della casa dove è stato effettuato il click.
-  #'  - controlla se la casa cliccata è destinazione del movimento di un pezzo che rappresenta una mossa lecita.
-  #'  - Se c'è una sola mossa valida per quella casa: aggiorna il valore visualizzato in `input$nextMove`.
-  #'  - Se ce ne sono più di una, aggiorna con la mossa ritenuta più plausibile.
+  #' Checks for each click made in the app if it was made on the board.
+  #' If it is:
+  #'  - identifies the name of the clicked square
+  #'  - checks if there is at least one valid move in that square
+  #'  - if there's one: update the value of `input$nextMove` with that.
+  #'  - if there are more: uses the value considered most plausible
   observeEvent(input$mouseClicked, {
     checkX <- input$mouseClicked[3] - input$mouseClicked[1] >= 0  && input$mouseClicked[3] - input$mouseClicked[1] <= input$mouseClicked[3]
     checkY <- input$mouseClicked[3] - input$mouseClicked[2] >= 0  && input$mouseClicked[3] - input$mouseClicked[2] <= input$mouseClicked[3]
@@ -535,15 +542,23 @@ server <- function(input, output, session) {
     }
   })
   
-  observeEvent(input$dblClick, {click("doIt")} )
+  observeEvent(input$dblClick, {
+    if(input$menu == "Main") click("doIt")
+  })
   
-  # shortcuts con la tastiera: clicca il tasto desiderato alla pressione di determinate combinazioni di tasti.
+  # keyboard events: clicks an actionButton depending on the key combination
   
   observeEvent(input$enterPressed, {click("doIt")} )
   
   observeEvent(input$ctrlzPressed, {click("undo")} )
   
-  observeEvent(input$rKeyPressed, {click("reset")} )
+  observeEvent(input$rKeyPressed, {click("reset") })
+  
+  # Shortcut to the "change dataset" section: 
+  observeEvent(input$changeDataset, {
+    updateTabsetPanel(session, inputId = "menu", selected = "?About")
+    updateNavlistPanel(session, inputId = "helpNavlist", selected = "Change dataset")
+  })
   
 }
 
