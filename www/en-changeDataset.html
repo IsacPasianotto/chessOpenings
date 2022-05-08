@@ -11,12 +11,12 @@
   <li><em><u>opening_name</u></em>: &nbsp;Name of the opening played in the match.</li>
   <li><em><u>moves</u>:</em>&nbsp;Game move sequences.</li>
 </ul>
-<p>Other variables, even if ignored at runtime, could weigh heavily on the memory.</p>
+<p>Any other variables present will be ignored.</p>
 <p>The program only works if the <em><u>winner</u></em> variable is formatted according to one of the following two alterantives:</p>
 <p>
   - &quot;white&quot;, &quot;black&quot;, &quot;draw&quot;<br>
   - &quot;1-0&quot;, &quot;0-1&quot;, &quot;1/2-1/2&quot;
 </p>
-<p>Finally, it should be noted that the file size limit is set to 256mB, to upload a larger file just modify the following line  <code>global.R</code>  file according to your needs:</p>
-<p><code>options(shiny.maxRequestSize=256*1024^2)</code></p>
+<p>Finally, it should be noted that the file size limit is set to 256mB, to upload a larger file just modify the following line in the <span class="Code">global.R</span>  file according to your needs:</p>
+<p><span class="Code">options(shiny.maxRequestSize=256*1024^2)</span></p>
 <p>The program automatically sets the default value of <em>R</em> to 5mB when it stops.</p>
