@@ -246,12 +246,12 @@ server <- function(input, output, session) {
     }
     names(dtfr) <- c("turn", "result", "prob", "inf", "sup")
     output$winnerPlot <- renderPlot({
-      ggplot(dtfr, aes(x=turn, fill=result, color=result)) +
+      g <- ggplot(dtfr, aes(x=turn, fill=result, color=result)) +
         geom_point(aes(y=prob),colour="black", pch=23, size=2) +
         geom_line(aes(y=prob)) +
         geom_ribbon(aes(ymin=inf, ymax=sup), alpha=0.2) + 
-        ggtitle("Winning odds") +
         my_theme()
+      g + scale_fill_manual(values = my_cols) + scale_color_manual(values = my_cols)
     }) 
   }
   
@@ -304,21 +304,22 @@ server <- function(input, output, session) {
           dtfr <- rbind(dtfr, temp1, temp2)
         }
         output$eloPlot <- renderPlot({
-          ggplot(dtfr, aes(x = factor(turn), y = elo, fill = color)) +
-            geom_boxplot() +
+          g <- ggplot(dtfr, aes(x = factor(turn), y = elo, fill = color)) +
+            geom_boxplot(col = my_cols[4], outlier.shape = NA) +
             my_theme()
+          g + scale_fill_manual(values = my_cols) + scale_color_manual(values = my_cols)
         })
       }, # plt1 
       "plt2" = {
         output$eloPlot <- renderPlot({
           plt1 <- ggplot(data.frame("elo" = rv$whiteEloLS[[rv$nTurn + 1]]), aes(x = elo)) +
-            geom_histogram() + 
+            geom_histogram(binwidth = 25, col = my_cols[4], fill = my_cols[2]) + 
             labs(title = "White ELO") + 
             my_theme()
           plt2 <- ggplot(data.frame("elo" = rv$blackEloLS[[rv$nTurn + 1]]), aes(x = elo)) +
-            geom_histogram() + 
+            geom_histogram(binwidth = 25, col = my_cols[4], fill = my_cols[1]) + 
             labs(title = "Black ELO") + 
-            my_theme()
+            my_theme() 
           gridExtra::grid.arrange(plt1, plt2, ncol = 1, nrow = 2)
         })
       }, # plt2
@@ -332,10 +333,11 @@ server <- function(input, output, session) {
         }
         df<- data.frame("turn" = turnColumn, "color" = colorColumn, "elo" = c(whiteAvg, blackAvg))
         output$eloPlot <- renderPlot({
-          ggplot(df, aes(x = turn, y = elo, col = color, fill = color)) +
+          g <- ggplot(df, aes(x = turn, y = elo, col = color, fill = color)) +
             geom_point(colour = "black", pch=23, size=2) +
             geom_line() +
             my_theme()
+          g + scale_fill_manual(values = my_cols) + scale_color_manual(values = my_cols)
         })
       } # plt3
     )

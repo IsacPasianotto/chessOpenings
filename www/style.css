@@ -1,5 +1,267 @@
+@import url('https://fonts.google.com/specimen/Oxygen+Mono');
+@import url('https://fonts.google.com/specimen/Source+Code+Pro');
+
+/* ============================  Whole app  ================================= */
+
+:root{
+  --MainDark: #047f5a;                 /* tutte le scritte, sfonto titolo */
+  --SuperDarkMain: #01573d;            /* scritte tabelle, scritte-tab:over, barra upload, output testuali */
+  --DarkBackground: #047f5a42;         /* bottoni-bkg, tab-orizzontali:over, tab-verticali:active */
+  --LightBackground: #97d7b9;          /* textInput-bkg, fileInput-bkg, tab-orizzontali:active */
+  --VeryLightBackground: #b5d9b533;    /* pannello-scacchiera, tab-orizzontali:notActive,  */
+  --SuperLightBackground: #b5d9b522;   /* whole App */
+  --Lines: #04945f;                    /* tutti i bordi */
+  --errors: #f2511f;                   /* messaggi d'errore */
+}
+.container-fluid{
+  font-family: 'Oxygen Mono', serif;
+  background-color: var(--SuperLightBackground);
+}
+.container-fluid *::selection{ 
+  background-color: var(--SuperDarkMain);
+  color: white;
+}
+ /* Main title "Chess opening explorer" */
+.mainTitle{                     
+  color: white;
+  background-color: var(--MainDark);
+  text-align: center;
+  font-size:48px;
+  font-weight:bolder;
+  padding-top: 24px;
+  height: 96px;  /* font-size * 2 */
+}
+.action-button:active {
+  outline: none !important;
+}
+/* ---------------------------- TabsetPanel(s)   ---------------------------  */
+/*  --> id = 'menu'  && id = 'infoTypeNavbar' */
+.nav-tabs{                                             /* tab container */
+  background-color: transparent;
+  border-bottom: none;
+  display: flex;
+  justify-content: center;
+}
+.nav-tabs li a{                                         /* unselected tabs */
+  border-bottom: 2px solid var(--Lines);
+  background-color: var(--VeryLightBackground);
+  color: var(--MainDark);
+  border-radius: 3px;
+}
+.nav-tabs li.active a, .nav-tabs li.active a:focus{     /* selected tab */
+  color: var(--SuperDarkMain);
+  background-color: var(--LightBackground);
+  border-top: 2px solid  var(--Lines);
+  border-left: 2px solid var(--Lines);
+  border-right: 2px solid var(--Lines);
+  border-bottom: none;
+}
+.nav-tabs li a:hover,  .nav-tabs li.active a:hover{/* all tab: hover */
+  background-color: var(--DarkBackground);
+  color: var(--SuperDarkMain);
+}
+
+/* ========================  Main tabsetPanel  ============================== */
+
+/* -----------------------  actionButton  objects  ---------------------------*/
+.mainButton, .mainButton:focus {
+  background-color: var(--DarkBackground);
+  color: var(--MainDark);
+}
+.mainButton:hover{
+  background-color: var(--DarkBackground);
+  color: white;
+}
+ .mainButton:active {         
+  background-color: var(--MainDark) !important;
+  color: white !important;
+  border-color:none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+/* -----------------------  texts and labels  ----------------------------------*/
+.infoValues, .control-label {                /* Labels describing textual outputs*/   
+  font-weight: bolder;
+  color: var(--MainDark);
+}
+/* main textOutput */
+#openingName, #openingECO, #nGamesInDF {     /* Calculated text outputs */
+  color: var(--SuperDarkMain);
+}
+#doItError {                                 /*  The error message when it's entered an illegal move */ 
+  color: var(--errors);
+  font-size: 16px;
+  font-weight: bolder;
+}
+#allowedMoves{                               /* allowed moves when it's entered an illegal move */
+  color: var(--MainDark);
+}
+#played{                                    /* Sequence of all input moves */
+  color: var(--SuperDarkMain);
+  font-family: 'Source Code Pro', monospace;
+}
+img#whiteIndicator, img#blackIndicator{
+  float: right;
+}
+/* --------------------  sidebarPanel  (chessboard panel)  ----------------------*/
+#boardPanel{   /* Change grey backgrounf of sidebarPanel where there is the chessboard */
+  background: var(--VeryLightBackground);
+  border: none;
+}
+#nextMove{  /* textInput area where to insert the moves  */
+  background-color: var(--DarkBackground);
+  color: var(--SuperDarkMain);
+  border-color: var(--Lines) !important ;
+}
+#nextMove:focus {
+  box-shadow: none ;
+  -webkit-box-shadow: none ;
+  border-color: var(--Lines) ;
+}
+/* --------------------  mainPanels  (plots panel)  ----------------------------*/
+
+/* The following n+ entries, together, align the numericInput to the right of its corresponding label. 
+ The following lines (between %%%%) are taken from:   https://stackoverflow.com/questions/72040479/how-to-position-label-beside-slider-in-r-shiny */
+/*  %%%% */
+.label-left .form-group {
+  display: flex;
+  flex-direction: row;        /* Place children on a row (default) */
+  width: 100%;                /* Set width for container */
+  max-width: 400px;
+}
+.label-left label {         
+  align-self: center;         
+  text-align: left;
+}
+#nCommon{
+  width: fit-content;
+  background-color: var(--LightBackgroudn) !important;
+  border-width: 0px;
+  box-shadow: none;
+  border-radius: 3px;
+  color: var(--MainDark);
+}
+/*  %%%% */
+/*  --  Dropdown ELO menu  --  */
+.selectize-input {                          /* current selection when menu is not dropped down */
+  font-size: 13px;
+  line-height: 13px;
+  color: var(--SuperDarkMain);
+  background-color: var(--LightBackground) !important;
+  border-color: transparent;
+}
+.selectize-input.focus {                          /* current selection when menu is not dropped down */
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-color: var(--Lines);
+} 
+.selectize-dropdown {                       /*  menù when it shows all possibilities */
+  font-size: 13px;
+  line-height: 13px;
+  color: var(--MainDark);
+  background-color: var(--VeryLightBackground);
+  box-shadow: none;
+  border: transparent;
+}
+.selectize-dropdown .active {               /* current selection when menu is dropped down */
+  color: white;
+  background-color: var(--MainDark);
+}
+
+/* =====================  Detils tabsetPanel  =============================== */
+.infoDetails {                    /* Table Labels */
+  font-size: 16px;
+  font-weight: bolder;
+  color: var(--MainDark);
+}
+.shiny-html-output table{       /* Tables in the center */
+  margin-left: auto;
+  margin-right: auto;
+}
+.shiny-html-output {            /* values inside tables */   
+  color: var(--MainDark);        
+}
+.shiny-html-output th, td {     /* column names */
+  text-align: center;
+  color: var(--SuperDarkMain);
+}
+/* ======================  ?About tabsetPanel =============================== */
+
 .languageButton{
   float:right;
   border:none;
+  background-color: transparent;
 }
-/*  More aesthetic improvements  improvements are coming soon  */
+.languageButton:hover{
+  background-color: var(--VeryLightBackground);
+}
+.languageButton:active:focus, .languageButton:active, .languageButton:focus {
+  background-color: var(--SuperLightBackground);
+  box-lines: none;
+  box-shadow: none;
+}
+#sourceCodeButton{ 
+  float:left;
+  box-shadow: none;
+  border-color: var(--MainDark);
+  background-color: var(--SuperLightBackground);
+  color: var(--MainDark);
+}
+/* --------------------------  navlistPanel  -------------------------------- */
+.nav-stacked{
+  background-color: none;
+}
+.nav-stacked li a{
+  background-color: var(--LightBackgroudn);
+  color: var(--MainDark); 
+}
+
+.nav-stacked li.active a, .nav-stacked li.active a:focus{
+  color: var(--MainDark);
+  background-color: var(--DarkBackground);
+  border-bottom: none;
+}
+.nav-stacked li a:hover, .nav-stacked li.active a:hover{
+  background-color: var(--SuperLightBackground);
+  color: var(--SuperDarkMain);
+}
+/*  --------------------- change Dataset tab -------------------------------  */
+.Code{            /*style for the R code */
+  color: var(--SuperDarkMain);
+  background-color: var(--LightBackground);
+}
+#inputFile-label{
+  color: var(--MainDark);
+  font-size: 12px;
+}
+.btn-file {        /* "browse" button */
+  background-color: var(--DarkBackground);
+  color: var(--MainDark);
+  border-color: var(--Lines) transparent var(--Lines) var(--Lines);
+}
+.btn-file:hover{ 
+  background-color: var(--DarkBackground);
+  color: white;
+}
+.btn-file:active{
+  background-color: var(--MainDark) !important;
+  color: white !important;
+}
+.form-control{    /* box containig input file name */
+  background-color: var(--LightBackground) !important;
+  color: var(--SuperDarkMain);
+  border-color: var(--Lines) var(--Lines) var(--Lines) transparent;
+}
+.form-control:focus{
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-color: var(--Lines) var(--Lines) var(--Lines) transparent;
+}
+.progress-bar{    /* loading file bar */ 
+  background-color: var(--SuperDarkMain);
+  color: white;
+}
+#inputFileError{
+  color: var(--errors);
+  font-weight: bold;
+}
