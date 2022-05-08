@@ -10,44 +10,17 @@ ui <- fluidPage(
   
   actionButton("it", img(src = "italian.png", height = "30px"), class = "languageButton"),
   actionButton("en", img(src = "english.png", height = "28px"), class = "languageButton"),
+  actionButton("sourceCodeButton", icon("gitlab"), label = "View code",  onclick ="window.open('https://gitlab.com/IsacPasianotto/chessOpenings', '_blank')"),
   
   tabsetPanel(
     id = "menu",
     selected = "Main",
     
-    # DATA & HELP tab --------------------------------------------------------
-    
-    tabPanel(title = "Data & help",
-      tags$br(), 
-      
-      navlistPanel(
-        id = "helpNavlist",
-        well = FALSE, 
-        widths = c(2, 10),
-        fluid = FALSE,
-        
-        tabPanel("About",
-          uiOutput("aboutPanel")
-        ), # tabPanel "About"
-        
-        tabPanel("How to move",
-          uiOutput("movePanel")
-        ), # tabPanle "How to move
-        
-        tabPanel("Change dataset",
-          uiOutput("datasetPanel"),
-          fileInput("inputFile",  "Select a custom chess dataset", accept = ".csv"),
-          textOutput("inputFileError")
-        ), #tabPanel "Change dataset"
-        
-      ), # navlistPanel 
-      
-    ), # tabPanel "data & help"
-    
     # MAIN tab ---------------------------------------------------------------
     
     tabPanel("Main",
       
+      tags$br(),
       sidebarLayout(
         
         # sidebar panel ........................................................
@@ -85,9 +58,11 @@ ui <- fluidPage(
             textOutput("nGamesInDF", inline = TRUE)
           ),
           
+          actionButton("changeDataset", label = "Change dataset", class = "mainButton"),
+          
         ), # sidebarPanel
         
-        # main panel ......... ................................................
+        # main panel ...........................................................
         
         mainPanel(
           
@@ -104,7 +79,9 @@ ui <- fluidPage(
                 span("Winning odds trend: ", class = "infoValues"),
                 textOutput("winPlotError"), 
                 plotOutput("winnerPlot", width = "50vw", height = "60vh"),
-                numericInput("nCommon", min = 1, max = 5, value = 3, label = "Most common continuation: "),
+                div(class = "label-left",
+                  numericInput("nCommon", min = 1, max = 5, value = 3, label = "Most common continuation: ")
+                ),
                 textOutput("commonContinuationsError"),
                 tableOutput("commonContinuations"),
                 
@@ -127,7 +104,7 @@ ui <- fluidPage(
               
             ) # tabPanel "ELO infos"
             
-          ) # tabsetPanel panel mainPanel (dx)
+          ) # tabsetPanel infoTypeNavbar (dx)
           
         ) # mainPanel
         
@@ -139,13 +116,13 @@ ui <- fluidPage(
     
     tabPanel("Detalis", 
       
-      span("Moves:", class = "infoValues"),
+      span("Moves:", class = "infoDetails"),
       textOutput("playedDetails"),
-      span("Winning odds: ", class = "infoValues"),
+      span("Winning odds: ", class = "infoDetails"),
       tableOutput("winningOddsDetails"),
       splitLayout(
-        p("Details of white ELO distributions", class = "infoValues"),
-        p("Details of black ELO distributions", class = "infoValues"),
+        p("Details of white ELO distributions", class = "infoDetails"),
+        p("Details of black ELO distributions", class = "infoDetails"),
       ), # splitLayout
       splitLayout(
         tableOutput("whiteEloDetails"),
@@ -153,6 +130,36 @@ ui <- fluidPage(
       ) # splitLayout 
       
     ), # tabPanel "Details"
+    
+    # ?About --------------------------------------------------------
+    
+    tabPanel(title = "?About",
+      tags$br(), 
+      
+      navlistPanel(
+        id = "helpNavlist",
+        well = FALSE, 
+        widths = c(2, 10),
+        fluid = FALSE,
+        
+        tabPanel("About",
+          uiOutput("aboutPanel")
+        ), # tabPanel "About"
+        
+        tabPanel("How to move",
+          uiOutput("movePanel")
+        ), # tabPanle "How to move
+        
+        tabPanel("Change dataset",
+          uiOutput("datasetPanel"),
+          fileInput("inputFile",  "Select a custom chess dataset", accept = ".csv"),
+          textOutput("inputFileError")
+          
+        ), #tabPanel "Change dataset"
+        
+      ), # navlistPanel 
+      
+    ), # tabPanel "data & help"
     
   ), # tabsetPanel
   
