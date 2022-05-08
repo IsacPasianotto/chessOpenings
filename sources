@@ -2,7 +2,7 @@
 
 Data are taken from:
     https://www.kaggle.com/
-and are relased as Creative Commons 0 (CC0)
+and are relased as Creative Commons 0 (CC0).
 CC0 license details: https://creativecommons.org/publicdomain/zero/1.0/
 
 In particular there are used the followig dataset:
@@ -28,3 +28,13 @@ www/whitePawn.svg   https://www.iconfinder.com/icons/754819/battle_checkmate_che
 www/blackPawn.svg   https://www.iconfinder.com/icons/754825/battle_checkmate_chess_figure_game_pawn_icon
 
 -------------------------------------------------------------
+
+Fonts are taken from:
+    https://fonts.google.com/
+and are releaser with "SIL Open Font License (OFL)".
+OFL license details: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl
+
+In particular there are used the followig fonts:
+
+Source code pro         https://fonts.google.com/specimen/Source+Code+Pro#standard-styles
+Oxygen Mono             https://fonts.google.com/specimen/Oxygen+Mono#about
