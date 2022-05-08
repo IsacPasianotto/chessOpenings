@@ -56,29 +56,31 @@ server <- function(input, output, session) {
   #'  of a game together with the relative confidence intervals, sorted as follows: white, black and draw.
   #' @param win a vector which is the winner column in `rv$selectedGamesDF`
   #' @return None
-  addProbabilitiesRow <- function(win) {
-    N <- length(win)
-    t <- rv$nTurn
-    freq <- unname(table(win)/N)
-    getInf <- function(p, N) {
-      infs <- p + qnorm(0.025) * sqrt( (p*(1-p)) / N )
-      for (i in 1:length(infs)) { infs[i] <- max(0, infs[i]) }
-      return(infs)
+   addProbabilitiesRow <- function(win) {
+    # Dummy variables
+    if (isVictoryBDW(win[1])){
+      white <- ifelse(tolower(win) == "white", 1, 0)
+      black <- ifelse(tolower(win) == "black", 1, 0)
+      draw <- ifelse(tolower(win) == "draw", 1, 0)
     }
-    getSup <- function(p, N) {
-      sups <- p + qnorm(0.975) * sqrt( (p*(1-p)) / N) 
-      for (i in 1:length(sups)) { sups[i] <- min(1, sups[i]) }
-      return(sups)
-    }  
-    Infs <- getInf(freq, N)
-    Sups <- getSup(freq, N)
-    row <- c()
-    if (isVictoryBDW(win[1])) { # B-D-W
-      row <- c(t, freq[3], Infs[3], Sups[3], freq[1], Infs[1], Sups[1], freq[2], Infs[2], Sups[2])
+    if (!(isVictoryBDW(win[1]))) {
+      white <- ifelse(tolower(win) == "1-0", 1, 0)
+      black <- ifelse(tolower(win) == "0-1", 1, 0)
+      draw <- ifelse(tolower(win) == "1/2-1/2", 1, 0)
     }
-    if (!isVictoryBDW(win[1])) { # 0-1*1-0*1/2-1/2
-      row <- c(t, freq[2], Infs[2], Sups[2], freq[1], Infs[1], Sups[1], freq[3], Infs[3], Sups[3])
+    getEstimations <- function(dummy) {
+      if (sum(dummy) == 0) return(rep(0,3))
+      if (sum(dummy) == length(dummy)) return(rep(1,3))
+      fit <- glm(dummy ~ 1, family = "binomial")
+      results <- c()
+      results[1] <- predict.glm(fit, type = "response")[1]
+      ci <- confint(fit) |> unname()
+      # logit^{-1}(p)= exp(p) / [1+exp(p)]
+      ci <- exp(ci)/(1+exp(ci))
+      results[c(2,3)] <- ci
+      return(results)
     }
+    row <- c(rv$nTurn, getEstimations(white), getEstimations(black), getEstimations(draw))
     rv$probabilitiesDF <- rbind(rv$probabilitiesDF , row)
     names(rv$probabilitiesDF) <- c("Turn", "prWhite", "infWhite", "supWhite", "prBlack", "infBlack", "supBlack", "prDraw", "infDraw", "supDraw")
   }
