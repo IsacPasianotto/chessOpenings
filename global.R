@@ -7,7 +7,7 @@ library(ggplot2)
 
 
 
-# Black - White(Draw) - (White) - extremly Dark (texts in plots) - title color - plot background
+# Black - White(Draw) - (White) - extremely Dark (texts in plots) - title color - plot background
 my_cols <- c('#04945f', '#047f5a42', '#74cdcb', '#004300', '#047f5a', '#b5d9b522')
 
 my_theme <- function() {
