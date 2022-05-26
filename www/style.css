@@ -118,6 +118,9 @@ img#whiteIndicator, img#blackIndicator{
   -webkit-box-shadow: none ;
   border-color: var(--Lines) ;
 }
+.chessboardjs{
+  cursor: pointer;
+}
 /* --------------------  mainPanels  (plots panel)  ----------------------------*/
 
 /* The following n+ entries, together, align the numericInput to the right of its corresponding label. 
