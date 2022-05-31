@@ -461,6 +461,7 @@ server <- function(input, output, session) {
       output$inputFileError <- renderText({""})
       initializeAll(file = input$inputFile$datapath)
       renderAll()
+      updateTabsetPanel(session, inputId = "menu", selected = "Main")
     }
   }) #input$inputFile
   
