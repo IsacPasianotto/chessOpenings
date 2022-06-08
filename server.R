@@ -353,9 +353,7 @@ server <- function(input, output, session) {
   #' @param None
   #' @return None
   renderBoard <- function() {
-    observe(
-      output$board <- renderChessboardjs({chessboardjs(rv$chss$fen())})
-    )
+    output$board <- renderChessboardjs({chessboardjs(rv$chss$fen())})
   }
   
   #' Render all the tables displayed in the "details" tab.
