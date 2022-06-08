@@ -90,19 +90,19 @@ ui <- fluidPage(
             ), # tabPanel "Winning Odds"
             
             tabPanel(
-              "ELO infos",
+              "Score info",
               
               br(),   
               selectInput("eloPlotType", "Which chart to display?",
-                c("Generale ELO trend" = "plt1",
-                  "Actual ELO focus" = "plt2",
-                  "Average ELO trend" = "plt3")
+                c("General score trend" = "plt1",
+                  "Actual score focus" = "plt2",
+                  "Average score trend" = "plt3")
               ), # selectInput 
               
               textOutput("eloPlotError"),
               plotOutput("eloPlot", width = "62vw", height = "62vh")
               
-            ) # tabPanel "ELO infos"
+            ) # tabPanel "Score infos"
             
           ) # tabsetPanel infoTypeNavbar (dx)
           
@@ -121,8 +121,8 @@ ui <- fluidPage(
       span("Winning odds: ", class = "infoDetails"),
       tableOutput("winningOddsDetails"),
       splitLayout(
-        p("Details of white ELO distributions", class = "infoDetails"),
-        p("Details of black ELO distributions", class = "infoDetails"),
+        p("Details of white score distributions", class = "infoDetails"),
+        p("Details of black score distributions", class = "infoDetails"),
       ), # splitLayout
       splitLayout(
         tableOutput("whiteEloDetails"),

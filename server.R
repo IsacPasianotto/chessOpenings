@@ -320,11 +320,11 @@ server <- function(input, output, session) {
         output$eloPlot <- renderPlot({
           plt1 <- ggplot(data.frame("elo" = rv$whiteEloLS[[rv$nTurn + 1]]), aes(x = elo)) +
             geom_histogram(binwidth = 25, col = my_cols[4], fill = my_cols[2]) + 
-            labs(title = "White ELO") + 
+            labs(title = "White score") + 
             my_theme()
           plt2 <- ggplot(data.frame("elo" = rv$blackEloLS[[rv$nTurn + 1]]), aes(x = elo)) +
             geom_histogram(binwidth = 25, col = my_cols[4], fill = my_cols[1]) + 
-            labs(title = "Black ELO") + 
+            labs(title = "Black score") + 
             my_theme() 
           gridExtra::grid.arrange(plt1, plt2, ncol = 1, nrow = 2)
         })
