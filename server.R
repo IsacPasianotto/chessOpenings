@@ -449,17 +449,19 @@ server <- function(input, output, session) {
   observeEvent(input$inputFile, {
     req(input$inputFile)
     check1 <- file_ext(input$inputFile$datapath) == "csv"
-    header <- colnames(read.csv2(input$inputFile$datapath))
-    check2 <- grepl("moves", header) && grepl("white_rating", header) && 
-      grepl("black_rating", header) && grepl("opening_name", header) &&
-      grepl("opening_code", header) && grepl("winner", header)
     if (!check1) output$inputFileError <- renderText({"ERROR: Please, select a .csv file"})
-    if (check1 && !check2) output$inputFileError <- renderText({"ERROR: The column requirements are not satisfied"})
-    if (check1 && check2) {
-      output$inputFileError <- renderText({""})
-      initializeAll(file = input$inputFile$datapath)
-      renderAll()
-      updateTabsetPanel(session, inputId = "menu", selected = "Main")
+    if (check1) {
+      header <- colnames(read.csv2(input$inputFile$datapath))
+      check2 <- grepl("moves", header) && grepl("white_rating", header) && 
+        grepl("black_rating", header) && grepl("opening_name", header) &&
+        grepl("opening_code", header) && grepl("winner", header)
+      if (!check2) output$inputFileError <- renderText({"ERROR: The column requirements are not satisfied"})
+      if (check2) {
+        output$inputFileError <- renderText({""})
+        initializeAll(file = input$inputFile$datapath)
+        renderAll()
+        updateTabsetPanel(session, inputId = "menu", selected = "Main")
+      }
     }
   }) #input$inputFile
   
