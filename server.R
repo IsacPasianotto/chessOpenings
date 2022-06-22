@@ -27,7 +27,7 @@ server <- function(input, output, session) {
   #' @param mv A single row from selectedGamesDF$moves, e.g.  selectedGamesDF$moves[1]
   #' @return TRUE if moves are recorded as for example "1. e4 e5 2. Nf3 Nc6 3. Bb5 ..."; 
   #'         FALSE if they are like: "e4 e5 Nf3 Nc6 Bb5 ..."
-  isNumeredMoves <- function(mw) {
+  isNumberedMoves <- function(mw) {
     return(startsWith(mw, "1."))
   }
   
@@ -133,13 +133,15 @@ server <- function(input, output, session) {
   #' @return a string with all the moves in sequence separated by a space
   genMoveStr <- function(movesVec) {
     str <- ""
-    if (isNumeredMoves(rv$allGamesDF$moves[1])) {
+    if (isNumberedMoves
+(rv$allGamesDF$moves[1])) {
       for (i in 1:length(movesVec)) {
         if (i %% 2 == 1) str <- paste0(str, i/2+0.5, ". ")
         str <- paste0(str, movesVec[i], " ")
       }
     }
-    if (!isNumeredMoves(rv$allGamesDF$moves[1])) {
+    if (!isNumberedMoves
+(rv$allGamesDF$moves[1])) {
       for (i in 1:length(movesVec)) str <- paste0(str, movesVec[i], " ")
     }
     str <- substr(str, 1, nchar(str) - 1)
@@ -171,8 +173,10 @@ server <- function(input, output, session) {
   #' @return a table with the n most popular continuation and their relative frequencies found in `rv$selectedGamesDF`
   getPopularContinuation <- function(n) {
     nTurn <- rv$nTurn 
-    if (isNumeredMoves(rv$selectedGamesDF$moves[1])) nTurn <- floor((3*nTurn+2)/2) + 1
-    if (!isNumeredMoves(rv$selectedGamesDF$moves[1])) nTurn <- nTurn + 1
+    if (isNumberedMoves
+(rv$selectedGamesDF$moves[1])) nTurn <- floor((3*nTurn+2)/2) + 1
+    if (!isNumberedMoves
+(rv$selectedGamesDF$moves[1])) nTurn <- nTurn + 1
     movesMatrix <- str_split_fixed(rv$selectedGamesDF$moves, pattern = " ", n = nTurn + 1)
     nextMoves <- movesMatrix[ , nTurn]
     return(sort(table(nextMoves), decreasing = TRUE)[1:n])
