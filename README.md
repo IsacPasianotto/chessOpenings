@@ -4,13 +4,21 @@
 
 Questa è una Shiny app scritta principalmente con il linguaggio di programmazione R per la rappresentazione di alcune semplici analisi durante le prime mosse di una partita di scacchi. 
 
-## Come usarla: 
+## Demo online
 
-Scaricato la cartella con il progetto, è sufficiente aprirlo con Rstudio ed selezionare "Run App".
+Una demo online per verificare il funzionamento dell'applicazione dal proprio browser è disponibile al seguente indirizzo:
 
-In alternativa su una console in *R*, digitare: 
+&emsp;&emsp;[https://isacpasianotto.shinyapps.io/chessOpenings/](https://isacpasianotto.shinyapps.io/chessOpenings/)
 
-`shiny::runApp('<pathToTheDirectory>')`
+## Come usarla - esecuzione in locale: 
+
+-  Clonare questo repository con il comando `git clone`, oppure scaricare la cartella con il progetto e de-comprimerla.
+
+-   È sufficiente aprire il progetto con Rstudio e selezionare "Run App".
+
+-  In alternativa su una console in *R*, digitare: 
+
+    `shiny::runApp('<pathToTheDirectory>')`
 
 
 ## Librerie necessarie al funzionamento
@@ -37,11 +45,18 @@ This is a shiny App written in R which shows some simple analysis of a chess gam
 
 All the explanations on how the application works and how to use it are on the "Data & Help" section.
 
-## How to use?
+## Online demo
+An online demo to see how the application works from your browser is available at the following address:
 
-Download this project, Then open it in *Rstudio*, or run the following command in an R console:
-        
-`shiny::runApp('<pathToTheDirectory>')`
+&emsp;&emsp;[https://isacpasianotto.shinyapps.io/chessOpenings/](https://isacpasianotto.shinyapps.io/chessOpenings/)
+
+## How to use? - localhost server
+
+-  Clone this repository with the `git clone` command or download the folder of this project and unzip it.
+-  Then open it in *Rstudio* and click on "Run App" button.
+-  Alternatively run the following command in an R console.
+
+    `shiny::runApp('<pathToTheDirectory>')`
 
 The program requires the following libraries (and all their dependencies) to work:
 
